@@ -1,12 +1,11 @@
 import sqlite3
 import os
 
-#banco de dados start
+# Conecta ao banco de dados SQLite 'historico.db' e cria o cursor
 banco = sqlite3.connect('historico.db')
 cursor = banco.cursor()
-#banco de dados end
 
-# funçao de salvar operaçao
+# Função para salvar uma operação no histórico se o usuário quiser
 def salvar_operacao(numero1, numero2, op, resultado):
     salvar = input('Deseja salvar esta operação? (S/N): ').strip().upper()
     if salvar == 'S':
@@ -14,30 +13,31 @@ def salvar_operacao(numero1, numero2, op, resultado):
             "INSERT INTO historico (numero1, numero2, op, total) VALUES (?, ?, ?, ?)",
             (numero1, numero2, op, resultado)
         )
-        banco.commit()
+        banco.commit()  # salva no banco
         os.system('cls')
         print('Operação salva com sucesso!\n')
 
-# Calcular
+# Função para calcular soma ou subtração
 def calcular():
     numero1 = float(input('Digite o primeiro numero: '))
     numero2 = float(input('Digite o segundo numero: '))
     op = input('Digite um operador valido (+,-): ')
+    
     if op == '+':
         operacao = numero1 + numero2
         print(f'O resultado da operaçao e: {operacao:.2f}')
-        salvar_operacao()
+        salvar_operacao()  # chama função de salvar
     elif op == '-':
         operacao = numero1 - numero2
         print(f'O resultado da operaçao e: {operacao:.2f}')
-        salvar_operacao()
+        salvar_operacao()  # chama função de salvar
     else:
         print('Digite um operador valido')
         return
     
-    banco.commit() 
+    banco.commit()  # confirma alterações no banco
 
-# Consultar Historico
+# Função para consultar e mostrar o histórico
 def historico():
     cursor.execute("SELECT * FROM historico")
     resultados = cursor.fetchall()
@@ -48,7 +48,7 @@ def historico():
     else:
         print("O histórico está vazio!\n\n")
 
-# Apagar historico
+# Função para apagar todo o histórico, com confirmação dupla
 def apagarhistorico():
     certeza = input('Tem certeza que deseja apagar o historico?(S/N): ')
     if certeza == 'S' or certeza == 's':
@@ -56,7 +56,8 @@ def apagarhistorico():
         if certeza == 'S' or certeza == 's':
             cursor.execute('DELETE from historico')
             os.system('cls')
-    banco.commit() 
+    banco.commit()  # aplica a exclusão
+
 
         
 
