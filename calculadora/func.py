@@ -21,16 +21,27 @@ def salvar_operacao(numero1, numero2, op, resultado):
 def calcular():
     numero1 = float(input('Digite o primeiro numero: '))
     numero2 = float(input('Digite o segundo numero: '))
-    op = input('Digite um operador valido (+,-): ')
+    op = input('Digite um operador valido (+,-, * e /): ')
     
     if op == '+':
         operacao = numero1 + numero2
         print(f'O resultado da operaçao e: {operacao:.2f}')
-        salvar_operacao()  # chama função de salvar
+        salvar_operacao(numero1, numero2, op, operacao)  # chama função de salvar
     elif op == '-':
         operacao = numero1 - numero2
         print(f'O resultado da operaçao e: {operacao:.2f}')
-        salvar_operacao()  # chama função de salvar
+        salvar_operacao(numero1, numero2, op, operacao)  # chama função de salvar
+    elif op == '*':
+        operacao = numero1 * numero2
+        print(f'O resultado da operaçao e: {operacao:.2f}')
+        salvar_operacao(numero1, numero2, op, operacao) # chama função de salvar
+    elif op == '/':
+        if numero2 == 0:
+            print('Nao tem como dividir por zero')
+        else:
+            operacao = numero1 / numero2
+            print(f'O resultado da operaçao e: {operacao:.2f}')
+            salvar_operacao(numero1, numero2, op, operacao) # chama função de salvar
     else:
         print('Digite um operador valido')
         return
