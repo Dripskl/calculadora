@@ -16,6 +16,9 @@ def salvar_operacao(numero1, numero2, op, resultado):
         banco.commit()  # salva no banco
         os.system('cls')
         print('Operação salva com sucesso!\n')
+    elif salvar == 'N':
+        os.system('cls')
+        print('Operaçao nao foi salva pela escolha do usuario! \n')
 
 # Função para calcular soma ou subtração
 def calcular():
