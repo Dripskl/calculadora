@@ -5,6 +5,8 @@ import os
 banco = sqlite3.connect('historico.db')
 cursor = banco.cursor()
 
+banco.commit()
+
 # Função para salvar uma operação no histórico se o usuário quiser
 def salvar_operacao(numero1, numero2, op, resultado):
     salvar = input('Deseja salvar esta operação? (S/N): ').strip().upper()
@@ -22,34 +24,38 @@ def salvar_operacao(numero1, numero2, op, resultado):
 
 # Função para calcular soma ou subtração
 def calcular():
-    numero1 = float(input('Digite o primeiro numero: '))
-    numero2 = float(input('Digite o segundo numero: '))
-    op = input('Digite um operador valido (+,-, * e /): ')
-    
-    if op == '+':
-        operacao = numero1 + numero2
-        print(f'O resultado da operaçao e: {operacao:.2f}')
-        salvar_operacao(numero1, numero2, op, operacao)  # chama função de salvar
-    elif op == '-':
-        operacao = numero1 - numero2
-        print(f'O resultado da operaçao e: {operacao:.2f}')
-        salvar_operacao(numero1, numero2, op, operacao)  # chama função de salvar
-    elif op == '*':
-        operacao = numero1 * numero2
-        print(f'O resultado da operaçao e: {operacao:.2f}')
-        salvar_operacao(numero1, numero2, op, operacao) # chama função de salvar
-    elif op == '/':
-        if numero2 == 0:
-            print('Nao tem como dividir por zero')
-        else:
-            operacao = numero1 / numero2
+    try:
+        numero1 = float(input('Digite o primeiro numero: '))
+        numero2 = float(input('Digite o segundo numero: '))
+        op = input('Digite um operador valido (+,-, * e /): ')
+        
+        if op == '+':
+            operacao = numero1 + numero2
             print(f'O resultado da operaçao e: {operacao:.2f}')
-            salvar_operacao(numero1, numero2, op, operacao) # chama função de salvar
-    else:
-        print('Digite um operador valido')
-        return
-    
-    banco.commit()  # confirma alterações no banco
+            salvar_operacao(numero1, numero2, op, operacao)  # chama função de salvar
+        elif op == '-':
+            operacao = numero1 - numero2
+            print(f'O resultado da operaçao e: {operacao:.2f}')
+            salvar_operacao(numero1, numero2, op, operacao)  # chama função de salvar
+        elif op == '*':
+            operacao = numero1 * numero2
+            print(f'O resultado da operaçao e: {operacao:.2f}')
+            salvar_operacao(numero1, numero2, op, operacao)  # chama função de salvar
+        elif op == '/':
+            if numero2 == 0:
+                print('Nao tem como dividir por zero')
+            else:
+                operacao = numero1 / numero2
+                print(f'O resultado da operaçao e: {operacao:.2f}')
+                salvar_operacao(numero1, numero2, op, operacao)  # chama função de salvar
+        else:
+            print('Digite um operador valido')
+            return
+        
+        banco.commit()  # confirma alterações no banco
+    except ValueError:
+        print('O programa deu erro, você voltou ao menu! (Os possíveis erros são: o que foi digitado não corresponde ao que foi pedido ou o programa, infelizmente, apresentou um bug.)')
+
 
 # Função para consultar e mostrar o histórico
 def historico():
@@ -64,16 +70,21 @@ def historico():
 
 # Função para apagar todo o histórico, com confirmação dupla
 def apagarhistorico():
-    certeza = input('Tem certeza que deseja apagar o historico?(S/N): ')
-    if certeza == 'S' or certeza == 's':
-        certeza = input('Realmente vc tem certeza?(S/N): ')
+    try: 
+        certeza = input('Tem certeza que deseja apagar o historico?(S/N): ')
         if certeza == 'S' or certeza == 's':
-            cursor.execute('DELETE from historico')
-            os.system('cls')
-    banco.commit()  # aplica a exclusão
-
-
+            certeza = input('Realmente vc tem certeza?(S/N): ')
+            if certeza == 'S' or certeza == 's':
+                cursor.execute('DELETE from historico')
+                os.system('cls')
+                banco.commit()
+            else:
+                print('Voce digitou errado!')
+        else:
+            print('Voce digitou errado!')
         
+    except ValueError:
+        print('Voce digitou errado!')
 
 
 """
